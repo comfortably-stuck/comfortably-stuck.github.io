@@ -165,8 +165,19 @@ a:hover {
   background: var(--light);
 }
 
+.comfort-highlight {
+  background: #f7f7f7;
+  border-block: 1px solid var(--line);
+}
+
 .content {
   max-width: 900px;
+}
+
+.section-eyebrow {
+  margin-bottom: 0.35rem;
+  color: #b31b1b;
+  text-align: center;
 }
 
 h2 {
@@ -226,6 +237,55 @@ h2 {
   width: 100%;
   height: auto;
   border-radius: 4px;
+}
+
+.video-feature {
+  margin: 1.5rem 0 0;
+  padding: 1rem;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 2px 12px #ddd;
+}
+
+.video-feature video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  border-radius: 4px;
+  background: #111;
+}
+
+.video-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.video-card {
+  min-width: 0;
+  margin: 0;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 5%);
+}
+
+.video-card video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  border-radius: 4px;
+  background: #111;
+}
+
+.video-card figcaption {
+  padding: 0.65rem 0.1rem 0.1rem;
 }
 
 figcaption,

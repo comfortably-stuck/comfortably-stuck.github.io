@@ -68,12 +68,35 @@
         <p>
           The benchmark's comfort metric mostly measures how long a vehicle
           stays stationary: fixed one-second segments keep accumulating while
-          a vehicle is stopped. We propose distance-based segmentation, which
+          a vehicle is stopped. We propose a distance-based segmentation, which
           scores comfort over the distance actually driven. We also identify
           two navigation-signal pitfalls: the default controller can replace
           model-predicted steering with a route-target angle, and the evaluation
           target point can differ substantially from the training input.
         </p>
+      </div>
+    </section>
+
+    <section class="section comfort-highlight" id="comfort-metric">
+      <div class="container content">
+        <h2>When “comfort” rewards standing still</h2>
+        <p class="lead">
+          The original metric only rises while a car is stopped, even though it
+          has made no progress. Distance-based segmentation scores the drive
+          itself instead.
+        </p>
+        <figure class="video-feature">
+          <video controls playsinline preload="metadata"
+                 aria-label="Side-by-side comparison of the original and distance-based comfort metrics as a car drives a short route.">
+            <source src="./assets/comfort.mp4" type="video/mp4">
+            Your browser does not support HTML video.
+          </video>
+          <figcaption>
+            Side by side: fixed one-second segments in the original metric keep
+            accumulating while the car is stationary; distance-based segments
+            advance only as it drives.
+          </figcaption>
+        </figure>
       </div>
     </section>
 
@@ -96,7 +119,7 @@
 
     <section class="section white-bg">
       <div class="container content">
-        <h2>Navigation-signal pitfalls</h2>
+        <h2>Navigation-signal pitfalls in action</h2>
         <p>
           Steering overruling can mask a model's own control behavior, while
           target-point sampling can give a model inputs unlike those used in
@@ -104,6 +127,43 @@
           are not directly comparable without checking how the harness supplies
           navigation signals.
         </p>
+        <div class="video-grid">
+          <figure class="video-card">
+            <video controls playsinline preload="metadata"
+                   aria-label="A car with steering overruling enabled is overcorrected and pushed off the road.">
+              <source src="./assets/SO.mp4" type="video/mp4">
+              Your browser does not support HTML video.
+            </video>
+            <figcaption>
+              <strong>Steering overruling (SO).</strong> With SO enabled, the
+              controller overcorrects and pushes the car off the road.
+            </figcaption>
+          </figure>
+          <figure class="video-card">
+            <video controls playsinline preload="metadata"
+                   aria-label="With steering overruling disabled, the car misses an intersection turn after receiving a future LANEFOLLOW command.">
+              <source src="./assets/TPM.mp4" type="video/mp4">
+              Your browser does not support HTML video.
+            </video>
+            <figcaption>
+              <strong>Target-point mismatch (TPM).</strong> Because the target point
+              during evaluation is sampled differently than during training,
+              the model sees a wrong future <code>LANEFOLLOW</code> command and misses
+              the turn.
+            </figcaption>
+          </figure>
+          <figure class="video-card">
+            <video controls playsinline preload="metadata"
+                   aria-label="With steering overruling and target-point mismatch fixed, the car successfully makes the intersection turn.">
+              <source src="./assets/TPM_SO_fixed.mp4" type="video/mp4">
+              Your browser does not support HTML video.
+            </video>
+            <figcaption>
+              <strong>Both issues fixed.</strong> The model receives the
+              corrected signals and successfully makes the turn.
+            </figcaption>
+          </figure>
+        </div>
         <figure class="figure">
           <img src="./assets/navigation-pitfalls.png"
                alt="Illustration of steering error compensation, a blocked overtake, and the difference between training-time and test-time navigation commands.">
@@ -128,9 +188,9 @@
             <thead>
               <tr>
                 <th>Method</th>
-                <th>Traditional</th>
-                <th>Fixed implementation</th>
-                <th>Distance-based</th>
+                <th>Traditional comfort</th>
+                <th>Fixed comfort implementation</th>
+                <th>Distance-based comfort</th>
                 <th>Stationary time</th>
               </tr>
             </thead>
@@ -147,9 +207,10 @@
           </table>
         </div>
         <p class="note">
-          Higher comfort scores indicate more segments passing the comfort
-          thresholds. Distance-based segments do not advance while the vehicle
-          is stationary.
+          Higher comfort scores indicate more segments passing the comfort thresholds.
+          The traditional comfort metric in Bench2Drive scores driving comfortable exactly when the car is stationary.
+          Fixing implementation errors results in driven segments being correctly classified as comfortable.
+          Only distance-based segmentation is not inflated when the vehicle is stationary.
         </p>
       </div>
     </section>

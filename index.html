@@ -5,134 +5,155 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description"
         content="Comfortably Stuck: evaluation pitfalls in Bench2Drive's closed-loop protocol.">
-  <meta name="theme-color" content="#111827">
+  <meta name="theme-color" content="#ffffff">
   <title>Comfortably Stuck</title>
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+      rel="stylesheet">
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
   <header class="hero">
-    <div class="container">
-      <p class="eyebrow">Bench2Drive · Closed-loop evaluation</p>
-      <h1>Comfortably Stuck</h1>
-      <p class="subtitle">Evaluation Pitfalls in Bench2Drive's Closed-Loop Protocol</p>
-      <div class="authors" aria-label="Authors">
-        <a href="https://scholar.google.com/citations?user=Zdi2340AAAAJ">Emad Aghajanzadeh</a><sup>1,2,*</sup>,
-        <a href="https://scholar.google.com/citations?user=Rb5gCN4AAAAJ">Thomas Schwarzfischer</a><sup>1,2,*,†</sup>,
-        <a href="https://scholar.google.com/citations?user=YQrGEjQAAAAJ">Moritz Thoma</a><sup>1,2</sup>,
-        <a href="https://scholar.google.com/citations?user=x9wjapMAAAAJ">Nael Fasfous</a><sup>1,†</sup>,
-        <a href="https://scholar.google.com/citations?user=WDNeaMoAAAAJ">Manoj Rohit Vemparala</a><sup>1</sup>,
-        <a href="https://scholar.google.com/citations?user=knjS148AAAAJ">Pierpaolo Mori</a><sup>1</sup>,
-        <a href="https://informatics.tuwien.ac.at/people/daniel-mueller-gritschneder">Daniel M&uuml;ller-Gritschneder</a><sup>3</sup>,
-        <a href="https://www.professoren.tum.de/en/schlichtmann-ulf">Ulf Schlichtmann</a><sup>2</sup>
+    <div class="hero-body">
+      <div class="container">
+        <div class="has-text-centered">
+          <p class="eyebrow">Bench2Drive · Closed-loop evaluation</p>
+          <h1 class="publication-title">Comfortably Stuck</h1>
+          <p class="subtitle">Evaluation Pitfalls in Bench2Drive's Closed-Loop Protocol</p>
+          <div class="authors publication-authors" aria-label="Authors">
+            <a href="https://scholar.google.com/citations?user=Zdi2340AAAAJ">Emad Aghajanzadeh</a><sup>1,2,*</sup>,
+            <a href="https://scholar.google.com/citations?user=Rb5gCN4AAAAJ">Thomas Schwarzfischer</a><sup>1,2,*,†</sup>,
+            <a href="https://scholar.google.com/citations?user=YQrGEjQAAAAJ">Moritz Thoma</a><sup>1,2</sup>,
+            <a href="https://scholar.google.com/citations?user=x9wjapMAAAAJ">Nael Fasfous</a><sup>1,†</sup>,
+            <a href="https://scholar.google.com/citations?user=WDNeaMoAAAAJ">Manoj Rohit Vemparala</a><sup>1</sup>,
+            <a href="https://scholar.google.com/citations?user=knjS148AAAAJ">Pierpaolo Mori</a><sup>1</sup>,
+            <a href="https://informatics.tuwien.ac.at/people/daniel-mueller-gritschneder">Daniel M&uuml;ller-Gritschneder</a><sup>3</sup>,
+            <a href="https://www.professoren.tum.de/en/schlichtmann-ulf">Ulf Schlichtmann</a><sup>2</sup>
+          </div>
+          <div class="affiliations publication-affiliations">
+            <sup>1</sup>BMW Group, Munich, Germany ·
+            <sup>2</sup>Technical University of Munich, Germany ·
+            <sup>3</sup>TU Wien, Vienna, Austria
+            <br><sup>*</sup>Equal contribution ·
+            <sup>†</sup>Affiliated with BMW Group at the time the work was done
+          </div>
+          <nav class="links publication-links" aria-label="Project links">
+            <a class="button button-arxiv" href="https://arxiv.org/abs/2610.21741">
+              <span class="button-icon">arXiv</span>
+              <span>Paper</span>
+            </a>
+            <a class="button button-github" href="https://github.com/comfortably-stuck/Bench2Drive-Comfort">
+              <span class="button-icon">GitHub</span>
+              <span>Code</span>
+            </a>
+          </nav>
+        </div>
       </div>
-      <p class="affiliations">
-        <sup>1</sup>BMW Group, Munich, Germany ·
-        <sup>2</sup>Technical University of Munich, Germany ·
-        <sup>3</sup>TU Wien, Vienna, Austria
-        <br><sup>*</sup>Equal contribution ·
-        <sup>†</sup>Affiliated with BMW Group at the time the work was done
-      </p>
-      <nav class="links" aria-label="Project links">
-        <a class="button button-primary" href="https://arxiv.org/abs/2610.21741">Read the paper</a>
-        <a class="button" href="https://github.com/comfortably-stuck/Bench2Drive-Comfort">Code</a>
-      </nav>
     </div>
   </header>
 
-  <main class="container">
-    <section class="section" id="abstract">
-      <h2>Overview</h2>
-      <p class="lead">
-        Closed-loop evaluation is widely regarded as a more faithful way to
-        assess end-to-end driving models than open-loop evaluation. We find
-        that Bench2Drive's evaluation protocol can itself misrepresent the
-        models scored on it.
-      </p>
-      <p>
-        The benchmark's comfort metric mostly measures how long a vehicle
-        stays stationary: fixed one-second segments keep accumulating while
-        a vehicle is stopped. We propose distance-based segmentation, which
-        scores comfort over the distance actually driven. We also identify
-        two navigation-signal pitfalls: the default controller can replace
-        model-predicted steering with a route-target angle, and the evaluation
-        target point can differ substantially from the training input.
-      </p>
-    </section>
-
-    <section class="stats" aria-label="Key findings">
-      <article class="stat-card">
-        <span class="stat-value">r = 0.97</span>
-        <p>Traditional comfort tracks time spent stationary across eight models.</p>
-      </article>
-      <article class="stat-card">
-        <span class="stat-value">r = 0.06</span>
-        <p>Distance-based comfort removes that relationship.</p>
-      </article>
-      <article class="stat-card">
-        <span class="stat-value">2 pitfalls</span>
-        <p>Controller steering overruling and target-point train/evaluation mismatch.</p>
-      </article>
-    </section>
-
-    <section class="section">
-      <h2>Navigation-signal pitfalls</h2>
-      <p>
-        Steering overruling can mask a model's own control behavior, while
-        target-point sampling can give a model inputs unlike those used in
-        training. Their effects differ across models, so the default scores
-        are not directly comparable without checking how the harness supplies
-        navigation signals.
-      </p>
-      <figure class="figure">
-        <img src="./assets/navigation-pitfalls.png"
-             alt="Illustration of steering error compensation, a blocked overtake, and the difference between training-time and test-time navigation commands.">
-        <figcaption>
-          The controller may steer toward the route target rather than follow
-          the model's waypoints; route-target sampling may also shift between
-          training and evaluation.
-        </figcaption>
-      </figure>
-    </section>
-
-    <section class="section">
-      <h2>Comfort results</h2>
-      <p>
-        Closed-loop results on the 220-route Bench2Drive benchmark. UniAD and
-        VAD use the corrected navigation protocol described in the paper.
-      </p>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Method</th>
-              <th>Traditional</th>
-              <th>Fixed implementation</th>
-              <th>Distance-based</th>
-              <th>Stationary time</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><th>UniAD</th><td>39.28</td><td>79.06</td><td>72.93</td><td>45.67%</td></tr>
-            <tr><th>VAD</th><td>45.95</td><td>56.84</td><td>37.21</td><td>47.64%</td></tr>
-            <tr><th>SparseDriveV2</th><td>7.75</td><td>23.50</td><td>50.28</td><td>7.08%</td></tr>
-            <tr><th>TFv6</th><td>19.58</td><td>25.97</td><td>29.20</td><td>19.83%</td></tr>
-            <tr><th>Orion</th><td>14.76</td><td>70.24</td><td>75.98</td><td>23.07%</td></tr>
-            <tr><th>SimLingo</th><td>31.71</td><td>36.80</td><td>25.86</td><td>32.16%</td></tr>
-            <tr><th>CaRL</th><td>22.81</td><td>61.36</td><td>71.84</td><td>24.76%</td></tr>
-            <tr><th>PDM-Lite</th><td>22.77</td><td>32.57</td><td>35.82</td><td>20.43%</td></tr>
-          </tbody>
-        </table>
+  <main>
+    <section class="section white-bg" id="abstract">
+      <div class="container content">
+        <h2>Overview</h2>
+        <p class="lead">
+          Closed-loop evaluation is widely regarded as a more faithful way to
+          assess end-to-end driving models than open-loop evaluation. We find
+          that Bench2Drive's evaluation protocol can itself misrepresent the
+          models scored on it.
+        </p>
+        <p>
+          The benchmark's comfort metric mostly measures how long a vehicle
+          stays stationary: fixed one-second segments keep accumulating while
+          a vehicle is stopped. We propose distance-based segmentation, which
+          scores comfort over the distance actually driven. We also identify
+          two navigation-signal pitfalls: the default controller can replace
+          model-predicted steering with a route-target angle, and the evaluation
+          target point can differ substantially from the training input.
+        </p>
       </div>
-      <p class="note">
-        Higher comfort scores indicate more segments passing the comfort
-        thresholds. Distance-based segments do not advance while the vehicle
-        is stationary.
-      </p>
     </section>
 
-    <section class="section citation" id="citation">
-      <h2>Citation</h2>
-      <pre><code>@misc{aghajanzadeh2026comfortably,
+    <section class="section light-grey-bg">
+      <div class="container stats" aria-label="Key findings">
+        <article class="stat-card">
+          <span class="stat-value">r = 0.97</span>
+          <p>Traditional comfort tracks time spent stationary across eight models.</p>
+        </article>
+        <article class="stat-card">
+          <span class="stat-value">r = 0.06</span>
+          <p>Distance-based comfort removes that relationship.</p>
+        </article>
+        <article class="stat-card">
+          <span class="stat-value">2 pitfalls</span>
+          <p>Controller steering overruling and target-point train/evaluation mismatch.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section white-bg">
+      <div class="container content">
+        <h2>Navigation-signal pitfalls</h2>
+        <p>
+          Steering overruling can mask a model's own control behavior, while
+          target-point sampling can give a model inputs unlike those used in
+          training. Their effects differ across models, so the default scores
+          are not directly comparable without checking how the harness supplies
+          navigation signals.
+        </p>
+        <figure class="figure">
+          <img src="./assets/navigation-pitfalls.png"
+               alt="Illustration of steering error compensation, a blocked overtake, and the difference between training-time and test-time navigation commands.">
+          <figcaption>
+            The controller may steer toward the route target rather than follow
+            the model's waypoints; route-target sampling may also shift between
+            training and evaluation.
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section light-grey-bg">
+      <div class="container content">
+        <h2>Comfort results</h2>
+        <p>
+          Closed-loop results on the 220-route Bench2Drive benchmark. UniAD and
+          VAD use the corrected navigation protocol described in the paper.
+        </p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Traditional</th>
+                <th>Fixed implementation</th>
+                <th>Distance-based</th>
+                <th>Stationary time</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th>UniAD</th><td>39.28</td><td>79.06</td><td>72.93</td><td>45.67%</td></tr>
+              <tr><th>VAD</th><td>45.95</td><td>56.84</td><td>37.21</td><td>47.64%</td></tr>
+              <tr><th>SparseDriveV2</th><td>7.75</td><td>23.50</td><td>50.28</td><td>7.08%</td></tr>
+              <tr><th>TFv6</th><td>19.58</td><td>25.97</td><td>29.20</td><td>19.83%</td></tr>
+              <tr><th>Orion</th><td>14.76</td><td>70.24</td><td>75.98</td><td>23.07%</td></tr>
+              <tr><th>SimLingo</th><td>31.71</td><td>36.80</td><td>25.86</td><td>32.16%</td></tr>
+              <tr><th>CaRL</th><td>22.81</td><td>61.36</td><td>71.84</td><td>24.76%</td></tr>
+              <tr><th>PDM-Lite</th><td>22.77</td><td>32.57</td><td>35.82</td><td>20.43%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note">
+          Higher comfort scores indicate more segments passing the comfort
+          thresholds. Distance-based segments do not advance while the vehicle
+          is stationary.
+        </p>
+      </div>
+    </section>
+
+    <section class="section white-bg citation" id="citation">
+      <div class="container content">
+        <h2>Citation</h2>
+        <pre><code>@misc{aghajanzadeh2026comfortably,
   title  = {Comfortably Stuck: Evaluation Pitfalls in Bench2Drive's Closed-Loop Protocol},
   author = {Aghajanzadeh, Emad and Schwarzfischer, Thomas and Thoma, Moritz and
             Fasfous, Nael and Vemparala, Manoj Rohit and Mori, Pierpaolo and
@@ -141,6 +162,7 @@
   eprint = {2610.21741},
   archivePrefix = {arXiv}
 }</code></pre>
+      </div>
     </section>
   </main>
 
